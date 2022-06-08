@@ -188,7 +188,7 @@ class DoublyLinkedList:
         self.length = 1
 
     def append (self,value): #Adding a new node to the end of the Node
-        new_node=Node(value)
+        new_node=NodeDoubly(value)
         if self.length==0:#THIS checks if the list and empty and if it is makes the head and tail equal to the new node
             self.head=new_node
             self.tail=new_node
@@ -215,5 +215,34 @@ class DoublyLinkedList:
         self.length-=1
         return temp.value
 
-
+    def prepend(self,value): #This function is used to add a node to the begining of a linked list
+        new_node=NodeDoubly(value)
+        if self.length==0:
+            self.head=new_node
+            self.tail=new_node
         
+        else:
+            new_node.next=self.head #This is setting the new first to point at the prior head
+            self.head.prev=new_node #This tells the prior head to now point to the new head
+            self.head=new_node #This is updating the list head
+        
+        self.length+=1
+        return True
+
+    def pop_first(self,value):#This function is used to pop the first element of a list
+        if self.length == 0: #This checks if the list is already 0
+            return None
+
+        temp = self.head #This sets the temp to the head
+        
+        if self.length ==1:#If there is only one item it pops it
+            self.head=None
+            self.tail=None
+        
+        else:
+            self.head=self.head.next #This moves the head to the next Node
+            self.head.prev=None #This disconnects the new head from the head being popped
+            temp.next=None #This disconnets the old head from the new head
+        
+        self.length-=1
+        return temp.value
