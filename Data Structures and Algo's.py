@@ -198,3 +198,22 @@ class DoublyLinkedList:
             self.tail=new_node #This updates the tail to the new node.
         self.length+=1
 
+    def pop(self,value):#This function is used to pop the last element of a list
+        if self.length==0:
+            return None
+        temp=self.tail #creating a variable so one can be returned to get the value and another used to remove the node
+        if self.length==1:#checks if there is only one item in the list
+            self.head=None
+            self.tail=None
+        
+        #LESS STEPS THAN LINKED LIST SINCE WE CAN GO RIGHT TO LEFT AND NOT BE STUCK GOING RIGHT TO LEFT
+
+        else: 
+            self.tail=self.tail.prev #This moves the tail to the previous Node
+            self.tail.next=None #This disconnects the next pointer to the prior tail Node
+            temp.prev=None #This disconnects the previous pointer from the prioer tail Node
+        self.length-=1
+        return temp.value
+
+
+        
