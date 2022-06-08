@@ -173,3 +173,28 @@ class LinkedList:
             temp.next=before #This flips the pointer from left to right to right to left
             before=temp #This updates before to the prior head
             temp=after #This moves the temp to the after Node. The after gets moved the next time the for loop runs.
+
+class NodeDoubly:
+    def __init__(self,value): #This node will point both forward to the next node to the right and to the left
+        self.value=value
+        self.next=None
+        self.prev=None
+
+class DoublyLinkedList:
+    def __init__(self, value):
+        new_node=NodeDoubly(value)
+        self.head=new_node
+        self.tail=new_node
+        self.length = 1
+
+    def append (self,value): #Adding a new node to the end of the Node
+        new_node=Node(value)
+        if self.length==0:#THIS checks if the list and empty and if it is makes the head and tail equal to the new node
+            self.head=new_node
+            self.tail=new_node
+        else:
+            self.tail.next=new_node #This sets the previous tail to point towards the new node
+            new_node.prev=self.tail #Since this is a new node at the end of the list need to connect it to previous node since DOUBLY
+            self.tail=new_node #This updates the tail to the new node.
+        self.length+=1
+
