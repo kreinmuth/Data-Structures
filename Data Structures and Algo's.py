@@ -469,8 +469,8 @@ class HashTable:
     #Linear propbing(open addressing) this is searching for an opening to store a key value in a blank location rather than list of lists
     #Can also have a linked list that you iterate through
 
-    def __init__(self, size=7):#This will initalize the hash table
-        self.data_map=[None]*size
+    def __init__(self, size=7):#This will initalize the hash table and set a default size
+        self.data_map=[None]*size #This creates a list of seven items that contain None 
 
     def _hash(self,key):
         my_hash=0
