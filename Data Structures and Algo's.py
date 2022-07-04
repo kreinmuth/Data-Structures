@@ -1,6 +1,7 @@
 
         
 from tempfile import tempdir
+from typing import Tuple
 
 
 board = [['x','o','x'],
@@ -246,3 +247,197 @@ class DoublyLinkedList:
         
         self.length-=1
         return temp.value
+
+    def get (self,index): #This returns the value of a linked list from a given index like a regular list
+        if index <0 or index >= self.length:#This checks the index value is in the list
+            return None
+        
+        temp=self.head #Set the temporary object equal to the current head
+        
+        if index<self.length/2:#This is used to check the first half of the list. It makes more sense to split it into two for speed
+            for _ in range(index): #This goes to the index value provided so if 2 it will go from 0 to 2
+                temp=temp.next #This moves the temp value to the next node each time the for loop iterates through
+        
+        else:#This checks the second half of the list
+            temp=self.tail#Since we are starting at the end of the list need to start at the tail
+            for _ in range(self.length-1,index,-1):#This tells the range where to start which is index of 3, and each time through it goes down from 3 to 2 to 1 etc.
+                temp=temp.prev#This sets the new temp value after each time the loop runs to the new node i.e moving it left.
+
+        return temp.value #This returns the temp value
+    
+    
+    def change_value(self, index, value): #This is changing the value of a node in a list
+        
+        temp = self.get(index) #This locates the head with the get function and the index provided by the user and creates an object
+        
+        if temp:
+            temp.value=value #This sets the value to the new provided value
+            return True
+        
+        return False #This is if the index provided is not in the list
+
+    def insert(self,index,value):
+        if index <0 or index> self.length: #This checks whether the index provided is in the list
+            return False
+
+        if index == 0: #This is if the index wants to be inserted at the begining of the list
+            return self.prepend(value)
+
+        if index == self.length: #This is if the index wants to be inserted at the end of the list
+            return self.append(value)
+
+        #BELOW IS INSERTING AT A SPECIFIC POINT MIDDLE OF THE LIST
+        new_node=Node(value)#This is creating a new node with the value provided
+        before = self.get(index-1)#This creates an object located at the spot before the index so it can connect to the next of the prior node
+        after=before.next #This creates an object that points to the Node after the newly created node.
+
+        new_node.prev=before #This is having the new nodes previous pointer point to the node before the new node
+        new_node.next=after #This is having the new nodes next pointer point to the node after the new node
+        before.next=new_node #This has the before node next pointer now point to the new node and not the after node anymore
+        after.prev=new_node #This has the after node prev pointer now point to the new node and not the before node anymore
+
+
+        self.length += 1 #Updaing the list by one
+        return True
+
+    def remove(self,index):
+        if index <0 or index >=self.length: #This checks if the index is in the range
+            return None
+        
+        if index == 0:#This removes the Node if it is the begining item
+            return self.pop_first()
+        
+        if index == self.length-1:#This removes the Node if it is the last Node in the List
+            return self.pop()
+        
+        temp=self.get(index)
+
+        temp.next.prev=temp.prev #This makes the next nodes previous pointer equal to the previous node and not the current temp node.
+        temp.prev.next=temp.next  #This makes the prev nodes next pointer equal to the next node and not the current temp node.
+        temp.next=None #This removes the Node connection to the next node
+        temp.prev=None #THis removes the Nodes connection to the previous node
+        
+        self.length-=1 #This updates the length
+        return temp.value
+
+class Stack:
+    def __init__(self,value):
+        new_node = Node(value) #Creates a new node
+        self.top = new_node #This sets the top pointer to the new node
+        self.height = 1
+        #The none pointer is pointing down visually
+
+    def push (self,value): #THis is putting a new node on the top of the stack
+        new_node = Node(value)
+        if self.height == 0: 
+            self.top=new_node #This makes the new node the top and does not need to adjust previous top since no nodes were in the stack
+        else:
+            new_node.next = self.top #This is setting the pointer for the new top node to the OLD top node so when it switches it knows what to point to
+            self.top=new_node #This is setting the TOP pointer to the new node at the top of the stack
+        self.height +=1
+        
+    
+    def pop (self,value): #This function takes the top node off of the stack and moves the top pointer to the previous node
+        if self.height==0: #This checks if the stack is empty
+            return None
+        
+        temp = self.top #This creates a temp object that points at current top for later reference
+        self.top=self.top.next #This reassigns the top pointer to the next node that the current top points to
+        temp.next=None #This is removing the next pointer from the temp top node which pops it out of the stack
+        self.height-=1 #This reduces the stacks
+        return temp.value #This returns the popped item
+
+class Queues:
+    #Queues add from one end and remove from the other like a roller coaster line
+    def __init__(self, value):
+        new_node = Node(value)
+        self.first=new_node #this is setting the first pointer to the new node
+        self.last=new_node #This is setting the last pointer to the new node
+        self.length=1
+    
+    def enterqueue(self,value):#This function is if we are adding something to the queue
+        new_node=Node(value)
+        if self.first is None:#This checks if the line (list) is empty so a node would be both first and last
+            self.first=new_node #this is setting the first pointer to the new node
+            self.last=new_node #this is setting the last pointer to the new node
+
+        else:
+            self.last.next=new_node #this sets the next pointer to the new node(new person in line) who is now last
+            self.last=new_node #This updates the last pointer to the new node moving it from the current last person
+        self.length+=1
+    
+    def leavequeue(self,value):#This function is if we are removing something from the queue
+        if self.length==0:#This is if the queue is empty
+            return self
+        temp = self.first #This lets us return the value of the node removed
+        
+        if self.length ==1:#This is if there is only 1 person in the queue
+            self.first = None
+            self.last = None
+        
+        else:#This removes a node if there are more than one.
+            self.first=self.first.next #This is moving the first pointer from the current first node to the next node(person in the line) who is now first
+            temp.next=temp #This removes the next pointer from the node(person who was 2nd and is now first)
+
+        self.length-=1
+        return temp.value
+
+class TreeNode:
+    def __init__(self,value):
+        self.value = value
+        self.left = None
+        self.right = None
+
+
+
+    #Binary Trees are below
+    #Think of these like a family tree. They are dicitionaries that contain a value and can go to the left or right. So the left or right can contain a dictionary within a dictionary.
+    #Full means each node is pointing to two other nodes
+    #Perfect is if each side of the tree is equal from left to right
+    #Complete is filled completely from left to right with no gaps
+    #Child nodes are the nodes conneted either to the left or right of the parent and can be parents themselves
+    #Leaf are nodes without any children
+
+    #Binary Search Trees are organized left to right such as grater than or less than. So greater to right less than to left.
+    #Binary Search Tree Big o 2^1(this)
+class BinarySearchTrees:
+    def _init_(self,value):
+        new_node=TreeNode(value)
+        self.root=new_node #Root is the top of the tree and is the pointer for trees that points to the top
+        
+        #self.root = None #This is creating a pointer without a node which works as well.
+        
+    def insert(self,value):#This function inserts a new node in the tree
+        new_node=Node(value)
+        
+        if self.root is None:#If the tree is empty then we are adding the new node
+            self.root=new_node
+            return True
+        
+        temp = self.root.root
+        
+        while (True):#Useing a while loop since the number of iterations through the loop is UNKOWN!!!!!
+            
+            if new_node.value==temp.value: #This checks if there is already a node with that value
+                return False
+            
+            if new_node.value<temp.value:#This is the left function
+                if temp.left is None:#If the spot is empty than it adds the new node
+                    temp.left=new_node
+                    return True
+                
+                temp = temp.left #This updates the temp if there is a node in the spot to use a the comparison for the next while loop.
+            
+            else:#This will check the right of each node in the tree  
+                if temp.right is None:#If the spot is empty it will add the new node
+                    temp.right=new_node
+                    return True
+                
+                temp = temp.right#If the spot is full it will update the temp for the next iteration of the loop
+
+
+
+
+
+
+
