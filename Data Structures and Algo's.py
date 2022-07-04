@@ -321,6 +321,7 @@ class DoublyLinkedList:
         return temp.value
 
 class Stack:
+    #Think of it like each node is a golf ball in a sleeve of titleists the main pointer only can get top and if you want the bottom you have to go take all others out
     def __init__(self,value):
         new_node = Node(value) #Creates a new node
         self.top = new_node #This sets the top pointer to the new node
@@ -387,9 +388,6 @@ class TreeNode:
         self.value = value
         self.left = None
         self.right = None
-
-
-
     #Binary Trees are below
     #Think of these like a family tree. They are dicitionaries that contain a value and can go to the left or right. So the left or right can contain a dictionary within a dictionary.
     #Full means each node is pointing to two other nodes
@@ -400,7 +398,7 @@ class TreeNode:
 
     #Binary Search Trees are organized left to right such as grater than or less than. So greater to right less than to left.
     #Binary Search Tree Big o 2^1(this)
-class BinarySearchTrees:
+class BinarySearchTrees: 
     def _init_(self,value):
         new_node=TreeNode(value)
         self.root=new_node #Root is the top of the tree and is the pointer for trees that points to the top
@@ -436,7 +434,7 @@ class BinarySearchTrees:
                 temp = temp.right#If the spot is full it will update the temp for the next iteration of the loop
 
 
-    def contains(self,value):
+    def contains(self,value):#This function checks if a tree contains something
         # NOT NEEDED if self.root is None: #This checks if the tree is empty and would not contain anything
         # NOT NEEDED    return False
         
@@ -453,6 +451,34 @@ class BinarySearchTrees:
                 return True
         
         return False #This is when the value is not in the tree
+
+    def minimum_value_node(self,current_node):#This function looks for the node with the minimum value in a specfic subtree!
+        
+        while current_node.left is not None: #Since we only need to compare less than we will always be going left. If it is not none then there is a node less than the parent node.
+            current_node=current_node.left #This updates the current node to run again
+
+        return current_node.value #This happens after the while loop returns a none so it returns this node
+
+
+class HashTable:
+    #A hash table like a hardware store. Hash is performed on dictionary key which then returns a key and its value AND an address. Think of this like searching for screws and you get back the quantity and where they are in the store.
+    #Hash's go one way so can only use key values and always returns same value
+    #Data is stored in a list
+    #They are a combo of using the dictionary key and address values from lists(which we create)
+    #If you want multiple items stored in a location need list of lists this is known as separate chaining
+    #Linear propbing(open addressing) this is searching for an opening to store a key value in a blank location rather than list of lists
+    #Can also have a linked list that you iterate through
+
+    def __init__(self, size=7):
+        self.data_map=[None]*size
+
+    def _hash(self,key):
+        my_hash=0
+        
+        for letter in key:
+            my_hash=(my_hash+ord(letter)*23%len(self.data_map))
+        
+        return my_hash
 
 
 
