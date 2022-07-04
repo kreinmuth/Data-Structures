@@ -436,7 +436,23 @@ class BinarySearchTrees:
                 temp = temp.right#If the spot is full it will update the temp for the next iteration of the loop
 
 
-
+    def contains(self,value):
+        # NOT NEEDED if self.root is None: #This checks if the tree is empty and would not contain anything
+        # NOT NEEDED    return False
+        
+        temp = self.root
+        while temp is not None:#Using while loop since we do not know how big the tree is
+            
+            if value < temp.value:#Compares the two values
+                temp=temp.left#Updates temp comparison for next while loop iteration
+            
+            elif value > temp.value:#Compares the two values this time going to the right
+                temp = temp.right#Updates temp comparison for next while loop iteration
+            
+            else: #This is when the value is confirmed in the tree
+                return True
+        
+        return False #This is when the value is not in the tree
 
 
 
