@@ -473,9 +473,9 @@ class HashTable:
         self.data_map=[None]*size #This creates a list of seven items that contain None 
 
     def _hash(self,key):
-        my_hash=0
+        my_hash=0 #This is setting the starting location at 0 and we can update it when looping through
         
-        for letter in key:
+        for letter in key:#This loops through the key list
             my_hash=(my_hash+ord(letter)*23%len(self.data_map))
         
         return my_hash
